@@ -1,0 +1,14 @@
+[package]
+name = "valiforge-diff"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+valiforge-core = { path = "../valiforge-core" }
+valiforge-schema = { path = "../valiforge-schema" }
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+
+[lints]
+workspace = true

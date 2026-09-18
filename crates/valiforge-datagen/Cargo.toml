@@ -1,0 +1,15 @@
+[package]
+name = "valiforge-datagen"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+valiforge-core = { path = "../valiforge-core" }
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+proptest.workspace = true
+fake.workspace = true
+
+[lints]
+workspace = true
