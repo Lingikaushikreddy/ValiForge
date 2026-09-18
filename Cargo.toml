@@ -1,0 +1,52 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/valiforge-cli",
+    "crates/valiforge-core",
+    "crates/valiforge-schema",
+    "crates/valiforge-diff",
+    "crates/valiforge-report",
+    "crates/valiforge-datagen",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.87"
+license = "Apache-2.0"
+repository = "https://github.com/Lingikaushikreddy/ValiForge"
+
+[workspace.dependencies]
+tokio = { version = "1", features = ["full"] }
+reqwest = { version = "0.12", features = ["json", "rustls-tls"], default-features = false }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde_yaml = "0.9"
+thiserror = "2"
+anyhow = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+clap = { version = "4", features = ["derive", "env", "string"] }
+openapiv3 = "2"
+jsonschema = "0.22"
+toml = "0.8"
+url = "2"
+chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1", features = ["v4", "serde"] }
+indicatif = "0.17"
+owo-colors = "4"
+proptest = "1"
+fake = { version = "3", features = ["derive"] }
+
+[workspace.lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+unwrap_used = "deny"
+panic = "deny"
+missing_errors_doc = "warn"
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
+opt-level = "s"
+panic = "abort"
