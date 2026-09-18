@@ -142,6 +142,18 @@ pub enum ParamLocation {
     Cookie,
 }
 
+/// Join the target base URL and an endpoint path without doubling the slash.
+///
+/// `url::Url` always renders a bare host with a trailing `/`, and `OpenAPI` paths
+/// start with one, so plain concatenation would request `http://host//users`.
+fn endpoint_url(base: &url::Url, path: &str) -> String {
+    format!(
+        "{}/{}",
+        base.as_str().trim_end_matches('/'),
+        path.trim_start_matches('/')
+    )
+}
+
 /// Validate a single endpoint against the live server.
 #[allow(clippy::unwrap_used, clippy::too_many_lines)]
 async fn validate_endpoint(
@@ -149,7 +161,7 @@ async fn validate_endpoint(
     ctx: &ValidationContext,
     endpoint: &ParsedEndpoint,
 ) -> EndpointResult {
-    let url = format!("{}{}", ctx.target_url, endpoint.path);
+    let url = endpoint_url(&ctx.target_url, &endpoint.path);
     let start = Instant::now();
 
     let mut request = match endpoint.method.to_uppercase().as_str() {
@@ -286,3 +298,22 @@ async fn validate_endpoint(
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::endpoint_url;
+
+    #[test]
+    fn endpoint_url_does_not_double_slash() {
+        let base: url::Url = "http://localhost:3000".parse().expect("valid url");
+        assert_eq!(endpoint_url(&base, "/users"), "http://localhost:3000/users");
+    }
+
+    #[test]
+    fn endpoint_url_keeps_base_path_prefix() {
+        let base: url::Url = "http://localhost:3000/api/".parse().expect("valid url");
+        assert_eq!(
+            endpoint_url(&base, "/users/1"),
+            "http://localhost:3000/api/users/1"
+        );
+    }
+}
