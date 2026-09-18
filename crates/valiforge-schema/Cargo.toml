@@ -1,0 +1,20 @@
+[package]
+name = "valiforge-schema"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+openapiv3.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+serde_yaml.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+valiforge-core = { path = "../valiforge-core" }
+
+[dev-dependencies]
+proptest.workspace = true
+insta = { version = "1", features = ["yaml"] }
+
+[lints]
+workspace = true
